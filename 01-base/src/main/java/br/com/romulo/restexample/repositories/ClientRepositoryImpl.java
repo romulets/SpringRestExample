@@ -1,38 +1,68 @@
 package br.com.romulo.restexample.repositories;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Repository;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 
+import org.springframework.context.annotation.Primary;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import br.com.romulo.restexample.entities.Client;
 import br.com.romulo.restexample.exceptions.ResourceNotFoundException;
-import br.com.romulo.restexample.models.Client;
 
 @Repository
 @Primary
 public class ClientRepositoryImpl implements ClientRepository {
-
-	private List<Client> clients;
 	
-	public ClientRepositoryImpl() {
-		clients = new ArrayList<>();
-		clients.add(new Client(){{ setId(1); setName("Rômulo"); }});
-		clients.add(new Client(){{ setId(2); setName("Jean"); }});
-		clients.add(new Client(){{ setId(3); setName("Heitor"); }});
-	}
-	
+	@PersistenceContext(unitName = "restExamplePU")
+	protected EntityManager entityManager;
 	
 	public List<Client> all() {
+		String hql = "SELECT c FROM Client c";
+		List<Client> clients = (List<Client>) entityManager.createQuery(hql).getResultList();
 		return clients;
 	}
 	
 	public Client findById(int id) {
-		for(Client client : clients)
-			if(client.getId() == id)
-				return client;
-		
-		throw new ResourceNotFoundException("Client entity not found.");
+		try{
+			String hql = "SELECT c FROM Client c WHERE c.id = :id";
+			Query query =  entityManager.createQuery(hql);
+			query.setParameter("id", id);
+			
+			Client client = (Client) query.getSingleResult();
+			return client;
+		} catch (DataAccessException e) {
+			throw new ResourceNotFoundException("Client entity not found.");
+		}
+	}
+	
+	@Transactional
+	@Override
+	public boolean save(Client entity) {
+		try {
+			this.entityManager.persist(entity);
+		} catch (PersistenceException error) {
+			error.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	@Transactional
+	@Override
+	public boolean delete(Client entity) {
+		try {
+			this.entityManager.remove(entity);
+		} catch (PersistenceException error) {
+			error.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 }
