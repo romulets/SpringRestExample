@@ -1,4 +1,4 @@
-package br.com.ghlabs;
+package br.com.romulo.restexample;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
