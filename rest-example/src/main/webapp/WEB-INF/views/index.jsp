@@ -10,8 +10,13 @@
 <link rel="stylesheet" href="/rest-example/resources/styles/bootstrap.min.css" />
 <link rel="stylesheet" href="/rest-example/resources/styles/main.css" />
 
+
+<script src="/rest-example/resources/scripts/jquery.min.js"></script>
+<script src="/rest-example/resources/scripts/bootstrap.min.js"></script>
 <script src="/rest-example/resources/scripts/angular.min.js"></script>
 <script src="/rest-example/resources/scripts/main.js"></script>
+
+
 
 </head>
 
@@ -25,32 +30,10 @@
 
 	<div class="container">
 		
-		<h2>Clients</h2>
-
+		<h2>Clients <button class="btn btn-success btn-sm" ng-click="add();">New Client</button></h2>
 		<hr />
 			
-		<div class="col-md-6">
-			<div class="card">
-				<div ng-if="client.id === null" class="card-header">
-					Adding new client
-				</div>
-				<div ng-if="client.id !== null" class="card-header">
-					Editing Client {{ client.id }} - {{ client.name }}
-				</div>
-				
-				<div class="card-block">
-					<div class="form-group">
-						<label for="name">Client Name:</label>
-						<input type="text" id="name" class="form-control form-control-sm" ng-model="client.name"/>
-					</div>
-					
-					<button class="btn btn-default" ng-click="save();">Save</button>
-					<button class="btn btn-warning" ng-click="reset();">Reset Form</button>
-				</div>
-			</div>			
-		</div>
-			
-		<div class="col-md-6">
+		<div class="col-md-12">
 			
 			<div class="card">
 				
@@ -83,7 +66,33 @@
 				
 			</div>				
 		
-		</div>	
+		</div>
+		
+		<div class="modal fade" id="modalForm">
+		  	<div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			        <h4 ng-if="client.id === null" class="modal-title">Adding new client</h4>
+			        <h4 ng-if="client.id !== null" class="modal-title">Editing Client {{ client.id }} - {{ client.name }}</h4>
+			      </div>
+			      <div class="modal-body">
+			        <div class="card-block">
+								<div class="form-group">
+									<label for="name">Client Name:</label>
+									<input type="text" id="name" class="form-control" ng-model="client.name"/>
+								</div>
+							</div>
+			      </div>
+			      <div class="modal-footer">
+			      <button class="btn btn-success" ng-click="save();">Save</button>
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->	
 </body>
 
 </html>

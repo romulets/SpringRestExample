@@ -5,8 +5,12 @@ app.controller('UserController', function($scope, $http) {
 	var getClients = function () {
 		$http.get('/rest-example/clients').then(function(response) {
 			$scope.clients = response.data;
-			$scope.reset();
+			reset();
 		}, function(){});
+	}
+	
+	var reset = function() {
+		$scope.client = { id: null, name: null }
 	}
 	
 	var insertClient = function() {
@@ -22,21 +26,25 @@ app.controller('UserController', function($scope, $http) {
 			insertClient();
 		else
 			updateClient();
+		
+		$('#modalForm').modal('hide');
 	}
 	
 	$scope.edit = function(client) {
 		$scope.client = client;
+		$('#modalForm').modal('show');
+	}
+	
+	$scope.add = function(client) {
+		reset();
+		$('#modalForm').modal('show');
 	}
 	
 	$scope.remove = function(client) {
 		$http.delete('/rest-example/clients/' + client.id).then(getClients, function(){});
 	}
 	
-	$scope.reset = function() {
-		$scope.client = { id: null, name: null }
-	}
-	
-	$scope.reset();
+	reset();
 	getClients();
 	
 });
