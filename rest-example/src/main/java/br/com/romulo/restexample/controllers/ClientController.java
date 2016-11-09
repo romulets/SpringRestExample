@@ -38,7 +38,7 @@ public class ClientController {
 	public void update(@PathVariable("id") int id, @RequestBody Client client){
 		Client persistedClient = repo.findById(id);
 		persistedClient.setName(client.getName());
-		repo.save(client);
+		repo.save(persistedClient);
 	}
 	
 	@RequestMapping(value = "/{id}", method=RequestMethod.DELETE)
