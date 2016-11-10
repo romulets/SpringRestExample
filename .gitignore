@@ -3,4 +3,5 @@
 .project
 .settings/
 target/
+bin/
 src/main/resources/application.properties
